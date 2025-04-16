@@ -1,4 +1,4 @@
-# Code related to the preprint ``Insular cortex encodes task alignment''
+# Code related to the preprint *Insular cortex encodes task alignment*
 
 This repository contains code related to the preprint
 
