@@ -1,4 +1,3 @@
-% JN 2023-08-28
 function ax = fig03_a(position, data, options, ylim)
 
 if strcmp(options.target_var, 'TC')
@@ -10,7 +9,6 @@ elseif strcmp(options.target_var, 'beta')
 else
     error('target var has to be TC or beta')
 end
-% bot_ylabel = "Reward rate [min^{-1}]";
 
 ax = axes('Position', position);
 ax.NextPlot = "add";
@@ -56,14 +54,11 @@ end
 
 
 p = polyfit(xdata, ydata, 1);
-% plot(ax, -1:30, polyval(p, -1:30), 'Color', 'k', ...
-%     'LineWidth', options.lw_thick);
 
 [rho, p] = corr(xdata, ydata');
 fprintf('Fig. 3A. %s All rats correlation = %.4g (P = %.4g)\n', ...
     options.target_var, rho, p);
 
-% also do the lme here
 lmetab = vertcat(lmedata{:});
 lmetab = array2table(lmetab, 'VariableNames', {'Day', 'Target', 'Rat'});
 lmetab.Rat = categorical(lmetab.Rat);
@@ -87,7 +82,6 @@ lgd = legend(lgddata, {'Rat 1', 'Rat 2', 'Rat 3', 'Rat 4', 'Rat 5'});
 pos = lgd.Position;
 lgd.Position(2) = pos(2) + .06;
 lgd.Position(1) = pos(1) - .17;
-% lgd.Color = 'none';
 lgd.EdgeColor = options.LegendEdgeColor;
 
 ax.YLim = ylim;

@@ -1,6 +1,5 @@
 function plot_learning_helper(data, tab_bhv, position_initial,...
     position_long_term, options, ylim)
-% JN 2025-01-23
 
 meta = data.meta;
 
@@ -14,14 +13,12 @@ ax2.NextPlot = "add";
 
 rats = 4:8;
 
-% lmedata = cell(5, 1);
 
 for irat = 1:5
     rat = rats(irat);
     idx = (meta.Rat == rat) & (meta.phase == "initial");
     xdata = days(meta.Date(idx) - datetime(2019, 10, 22));
     ydata = tab_bhv.frac_succ(idx);
-%     ydata = data.adkls(use_param, LL_imax_all_opt(idx, use_param));
     plot(ax1, xdata, ydata, 'Marker', options.RatMarkers(irat), ...
         'MarkerFaceColor', options.RatColors(irat, :), ...
         'MarkerEdgeColor', options.RatColors(irat, :), ...
@@ -38,7 +35,6 @@ lgd = legend(ax1, {'Rat 1', 'Rat 2', 'Rat 3', 'Rat 4', 'Rat 5'});
 pos = lgd.Position;
 lgd.Position(2) = pos(2) - .53;
 lgd.Position(1) = pos(1) + .02;
-% lgd.Color = 'none';
 lgd.EdgeColor = options.LegendEdgeColor;
 
 idx = meta.phase == "initial";
@@ -46,46 +42,9 @@ xdata = days(meta.Date(idx) - datetime(2019, 10, 22));
 ydata = tab_bhv.frac_succ(idx);
 
 p = polyfit(xdata, ydata, 1);
-% plot(ax1, -1:30, polyval(p, -1:30), 'Color', 'k', ...
-%     'LineWidth', options.lw_thick);
 
 ax1.YLim = ylim;
 
-% irats = [1 2 4 5];
-% 
-% ax1 = axes('Position', position_initial);
-% ax1.NextPlot = "add";
-% 
-% ax2 = axes('Position', position_long_term);
-% ax2.NextPlot = "add";
-% 
-% rats = 4:8;
-
-% lmedata = cell(5, 1);
-% 
-% for irat = 1:5
-%     rat = rats(irat);
-%     idx = (meta.Rat == rat) & (meta.phase == "initial");
-%     xdata = days(meta.Date(idx) - datetime(2019, 10, 22));
-%     ydata = tab_bhv.frac_succ(idx);
-% %     ydata = data.adkls(use_param, LL_imax_all_opt(idx, use_param));
-%     plot(ax1, xdata, ydata, 'Marker', options.RatMarkers(irat), ...
-%         'MarkerFaceColor', options.RatColors(irat, :), ...
-%         'MarkerEdgeColor', options.RatColors(irat, :), ...
-%         'MarkerSize', options.RatMarkerSize, ...
-%         'LineStyle', 'none');
-% end
-% 
-% ax1.YLabel.String = ylabel;
-% ax1.XLabel.String = "Initial training [days]";
-% ax1.XLim = [0 28];
-% ax1.YGrid = "on";
-% 
-% lgd = legend(ax1, {'Rat 1', 'Rat 2', 'Rat 3', 'Rat 4', 'Rat 5'});
-% pos = lgd.Position;
-% lgd.Position(2) = pos(2) - .53;
-% lgd.Position(1) = pos(1) + .02;
-% lgd.Color = 'none';
 lgd.EdgeColor = options.LegendEdgeColor;
 irats = [1 2 4 5];
     

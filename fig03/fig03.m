@@ -65,6 +65,10 @@ pos_success_ini(2) = d_bottom;
 pos_success_long(2) = d_bottom;
 
 ylim = [.2 .9];
+
+%fig03_panel(pos_success_ini, data, tab_bhv, "success", "initial", options);
+%fig03_panel(pos_success_long, data, tab_bhv, "success", "implanted", options);
+
 plot_learning_helper(data, tab_bhv, pos_success_ini, pos_success_long, ...
     options, ylim)
 
