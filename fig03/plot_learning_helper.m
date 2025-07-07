@@ -13,7 +13,6 @@ ax2.NextPlot = "add";
 
 rats = 4:8;
 
-
 for irat = 1:5
     rat = rats(irat);
     idx = (meta.Rat == rat) & (meta.phase == "initial");
