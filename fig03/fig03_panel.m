@@ -1,4 +1,4 @@
-function fig03_panel(position, data, tab_bhv, bhvmeasure, phase, options)
+function ax = fig03_panel(position, data, tab_bhv, bhvmeasure, phase, options)
 
 ax = axes('Position', position);
 ax.NextPlot = "add";
@@ -14,7 +14,7 @@ elseif strcmp(phase, "implanted")
     do_initial = false;
     irats = [1 2 4 5];
     alpha = .3; % plot with smaller opacity.
-    xlabel = "Implanted period [days]"
+    xlabel = "Implanted period [days]";
 else
     error("Phase has to be initial or implanted")
 end
