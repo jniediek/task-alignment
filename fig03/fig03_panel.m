@@ -65,7 +65,6 @@ for irat = irats
     end
 end
 
-ax.YLabel.String = ylabel;
 ax.XLabel.String = xlabel;
 ax.YGrid = "on";
 
@@ -74,13 +73,16 @@ ax.YGrid = "on";
 % ymin = ylim(1);
 % ygap = .04;
 % l = ax2.XLim(2);
-if ~do_initial
+if do_initial
+    ax.XLim = [0 28];
+    ax.YLabel.String = ylabel;
+else
     starts = [0 50 150];
     for i = 1:3
         f = starts(i);
         xline(ax, f, 'LineWidth', 1.5, 'Color', .1 * [1 1 1]);
     end
-    ax.YTick = ax.YTick(1:2:end);
+
     ax.XLim = [0 410];
 end
 
@@ -88,4 +90,5 @@ if ~do_taskalignment
     ax.YLim = ylim;
 end
 
+ax.YTick = ax.YTick(1:2:end);
 % ax.YTick = ax.YTick(1:2:end);

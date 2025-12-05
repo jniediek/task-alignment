@@ -43,9 +43,11 @@ options.target_var = 'beta';
 options.plot_xlabel = false;
 
 ylim_a = [0.06 0.11];
-ax_a = fig03_a(pos_beta_ini, data, options, ylim_a);
+% ax_a = fig03_a(pos_beta_ini, data, options, ylim_a);
 ylim_b = [0.06 .15];
-ax_b = fig03_b(pos_beta_long, data, options, ylim_b);
+% ax_b = fig03_b(pos_beta_long, data, options, ylim_b);
+ax_a = fig03_panel(pos_beta_ini, data, tab_bhv, "TA", "initial", options);
+ax_b = fig03_panel(pos_beta_long, data, tab_bhv, "TA", "implanted", options);
 
 ax_b.YTick = 0.01 + (ylim_b(1):0.02:ylim_b(2));
 
@@ -67,6 +69,7 @@ pos_success_long(2) = d_bottom;
 ylim = [.2 .9];
 
 fig03_panel(pos_success_ini, data, tab_bhv, "success", "initial", options);
+
 fig03_panel(pos_success_long, data, tab_bhv, "success", "implanted", options);
 
 % plot_learning_helper(data, tab_bhv, pos_success_ini, pos_success_long, ...
@@ -82,12 +85,10 @@ for i = 1:length(letters)
         options.FontName, "HorizontalAlignment", "left");
 end
 
-
 set(fig.Children, 'FontName', 'Nimbus Sans');
 
 fname = 'fig_03.png';
 print('-dpng', '-r300', fname)
-
 
 pos_beta_comp = [.12 .12 .8 .7];
 supp_fig = figure("Position", [0 0 500 400], 'Color', 'w');
