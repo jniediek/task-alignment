@@ -15,9 +15,14 @@ function ax = fig06_sample_policies(pos, options)
 %   over a wide interval and strongly over a narrow one: at s = 100 the peak
 %   only rises from 0.010 to 0.031, at s = 20 from 0.050 to 0.169.
 %
-%   The dashed line marks the best action. It is deliberately not at the
-%   midpoint of the interval: the optimal policy cuts slightly above the middle
-%   (53 of 100, 11 of 20), so binary search is not quite what it converges to.
+%   No marker is drawn for the best action, deliberately. The MDP is exactly
+%   symmetric under a -> n+1-a, so the best guess is the balanced split
+%   (n+1)/2 -- ordinary binary search, ranks 50 and 51 tied at s = 100. The
+%   curves below peak slightly above that, at 53 and 11, because the solved
+%   policy does not quite respect the symmetry: see CHECK_POLICY_SYMMETRY,
+%   which measures the violation and reports it when the figure is built.
+%   Marking either the balanced split or the drawn peak would assert something
+%   the panel cannot support, so the panel asserts neither.
 %
 %   Data: ../data/fig06_policy.mat, with betas (200x1, linspace(1e-6, 2, 200))
 %   and Policy (200x101x101), where Policy(k, s+1, a) = pi_betas(k)(a | s). The
@@ -46,16 +51,13 @@ for i_st = 1:n
         pos(3), inner_h]);
     ax(i_st).NextPlot = "add";
 
-    % The best action is read at the largest beta, where the policy is sharpest.
-    % It must not be taken per curve: for 36 of the 100 states the argmax shifts
-    % by one somewhere along the grid, and s = 100 is one of them, so a per-beta
-    % marker would jump.
-    [peak, a_star] = max(squeeze(S.Policy(end, s + 1, 1:s)));
+    % Where the sharpest curve peaks, against where it should. Printed rather
+    % than drawn, so the gap is visible when the figure is built instead of
+    % being asserted on the figure itself.
+    [peak, a_max] = max(squeeze(S.Policy(end, s + 1, 1:s)));
 
-    xline(ax(i_st), a_star, '--', 'Color', .5 * [1 1 1], 'LineWidth', .5);
-
-    fprintf('Panel C, state %3d: best action %d of %d, peak probability %.4f\n', ...
-        s, a_star, s, peak);
+    fprintf(['Panel C, state %3d: curves peak at rank %d (peak %.4f), ' ...
+             'balanced split is %.1f\n'], s, a_max, peak, (s + 1) / 2);
 
     for i = 1:numel(options.pol_nums)
         k = options.pol_nums(i);
@@ -77,12 +79,6 @@ for i_st = 1:n
                 'Color', options.TitleColors(i, :), 'FontSize', tick_size, ...
                 'HorizontalAlignment', 'left', 'VerticalAlignment', 'top');
         end
-    end
-
-    if i_st == 1
-        text(ax(i_st), a_star - .02 * s, y_lims(i_st, 2), 'best action', ...
-            'FontSize', tick_size, 'Color', .4 * [1 1 1], ...
-            'HorizontalAlignment', 'right', 'VerticalAlignment', 'top');
     end
 
     text(ax(i_st), .99, .95, sprintf('s = %d', s), 'Units', 'normalized', ...

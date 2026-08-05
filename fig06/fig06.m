@@ -52,6 +52,10 @@ pos_d = inset_box(box_d, [.1 .19 .85 .7]);
 pos_e = inset_box(box_e, inset);
 pos_f = inset_box(box_f, inset);
 
+% The policy this figure is built on has a known flaw. Reported here rather
+% than corrected, so it is on the record every time the figure is made.
+check_policy_symmetry();
+
 fig06_task_schematic(pos_a, options);
 fig06_value_complexity(pos_b, options);
 fig06_sample_policies(pos_c, options);
@@ -66,7 +70,11 @@ end
 
 fig06_beta_cohorts(pos_e, cohorts, options);
 
-fig06_simulation_vs_human(pos_f, options);
+[~, model_tbl] = fig06_beta_vs_avg_steps(pos_f, [], options);
+
+fprintf('Panel F: model curve %.4f guesses/game at beta = %g, %.4f at beta = %g\n', ...
+    model_tbl.mean_steps(1), model_tbl.beta(1), ...
+    model_tbl.mean_steps(end), model_tbl.beta(end));
 
 letters = 'ABCDEF';
 boxes = [box_a; box_b; box_c; box_d; box_e; box_f];
