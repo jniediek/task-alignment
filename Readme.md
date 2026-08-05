@@ -19,8 +19,11 @@ time from `data/fig06_policy.mat` (the beta grid, the policy tensor, and the per
 `Value` and `Complexity`) and `data/fig06_steps.mat` (the choice steps of 228 subjects),
 via `compute_cohort_betas.m` and `fit_subject_betas.m`.
 
-Panels B, D and E are finished. Panels A, C and F are labelled placeholders; the
+Panels B, C, D and E are finished. Panels A and F are labelled placeholders; the
 `fig06_*.m` file for each one documents what it will show and which data it will need.
+
+Panels B and C share a selection of four policies, set as `options.pol_nums` in `fig06.m`:
+panel C draws them and panel B marks them on its curve, in the same colours.
 
 `fig06/fig06_beta_cohort_stats.m` is a separate statistics script, not part of the
 figure. It backs the claims made about panel E with permutation tests and bootstrap

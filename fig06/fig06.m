@@ -1,11 +1,20 @@
 % JN 2026-08-05
 % Plotting code for Fig 6
 %
-% Panels A-D and F are still placeholders; only panel E is real. See the
-% individual fig06_*.m files for what each panel will become.
+% Panels A and F are still placeholders. See the individual fig06_*.m files for
+% what each of them will become.
 
 addpath('../common')
 options = get_options();
+
+% The four policies panel C draws, marked on panel B's curve in the same
+% colours so the two panels can be read together. Indices into the beta grid of
+% ../data/fig06_policy.mat, spanning it from the uniform end to the sharpest.
+options.pol_nums = [1 51 101 200];
+
+% winter(6) rather than winter(4), as in fig02: taking the first four rows of a
+% six-step ramp keeps the colours off the extreme ends.
+options.TitleColors = winter(6);
 
 % 800 px is the A4 text width, so a full page would be about 1130 px high.
 % Three rows of 300 px leave room for the legend below the figure on the same
@@ -38,7 +47,7 @@ inset_plain = [.1 .1 .8 .8];
 
 pos_a = inset_box(box_a, inset_plain);
 pos_b = inset_box(box_b, inset);
-pos_c = inset_box(box_c, inset_plain);
+pos_c = inset_box(box_c, inset);
 pos_d = inset_box(box_d, [.1 .19 .85 .7]);
 pos_e = inset_box(box_e, inset);
 pos_f = inset_box(box_f, inset);

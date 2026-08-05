@@ -53,6 +53,13 @@ ax.YLim = [y_floor max(y_value)];
 ax.Box = "off";
 ax.TickLength = [.015 .015];
 
-% fig02_c also marks the betas whose policies its panels A and B show. The
-% equivalent set for figure 6 is panel C's to choose, so the dots are left out
-% until FIG06_SAMPLE_POLICIES fixes them; add them here in the same colours.
+% The four policies panel C draws, marked on the curve as fig02_c marks its own
+% four. Dots only: panel C labels them with their beta, and the shared colours
+% are what ties the two panels together, so repeating the numbers here would
+% only cost space. Clipping off so the first dot, which sits exactly on the y
+% axis at I(pi) = 0, is not cut in half.
+for i = 1:numel(options.pol_nums)
+    k = options.pol_nums(i);
+    plot(ax, x_info(k), y_value(k), '.', 'MarkerSize', 12, ...
+        'Color', options.TitleColors(i, :), 'Clipping', 'off');
+end
