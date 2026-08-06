@@ -1,5 +1,5 @@
 function [ax, model_tbl, human_tbl] = fig06_beta_vs_avg_steps(pos, data_dir, options)
-%FIG06_BETA_VS_AVG_STEPS  Panel F of figure 6: model vs. human, beta against
+%FIG06_BETA_VS_AVG_STEPS  Panel E of figure 6: model vs. human, beta against
 %   average game length.
 %
 %   AX = FIG06_BETA_VS_AVG_STEPS(POS, DATA_DIR, OPTIONS) draws into a new axes

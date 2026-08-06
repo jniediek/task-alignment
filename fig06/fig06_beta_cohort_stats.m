@@ -1,7 +1,7 @@
 % JN 2026-08-04
-% Statistics backing panel E of figure 6 (see FIG06_BETA_COHORTS).
+% Statistics backing panel F of figure 6 (see FIG06_BETA_COHORTS).
 %
-% Refits the cohorts through COMPUTE_COHORT_BETAS, i.e. the very code panel E
+% Refits the cohorts through COMPUTE_COHORT_BETAS, i.e. the very code panel F
 % is drawn from, so the two cannot drift apart: 140 rows, one row per
 % (cohort, game number), each row a single beta_hat pooled by grid-search MLE
 % over every choice step that cohort's subjects took at that game number.
@@ -247,7 +247,7 @@ fprintf('\n');
 % replacement -- a pairs bootstrap.
 %
 % What this interval covers: the scatter of the points that are actually drawn
-% in panel E. What it does NOT cover: the estimation uncertainty of each
+% in panel F. What it does NOT cover: the estimation uncertainty of each
 % individual beta_hat. Propagating that would mean resampling *subjects* within
 % the cohort and re-running FIT_BETA_MLE for every game number, which needs
 % data/steps.mat and data/policy.mat. So this is not a subject-level interval

@@ -1,8 +1,8 @@
 % JN 2026-08-05
 % Plotting code for Fig 6
 %
-% Panels A and F are still placeholders. See the individual fig06_*.m files for
-% what each of them will become.
+% Panel A is still a placeholder. See fig06_task_schematic.m for what it will
+% become.
 
 addpath('../common')
 options = get_options();
@@ -18,7 +18,7 @@ options.TitleColors = winter(6);
 
 % 800 px is the A4 text width, so a full page would be about 1130 px high.
 % Three rows of 300 px leave room for the legend below the figure on the same
-% page. Panel E's font sizes are absolute and were tuned at 400 x 370 px, so
+% page. Panel F's font sizes are absolute and were tuned at 400 x 370 px, so
 % they read slightly larger in the shorter box; that is intended.
 figheight = 900;
 
@@ -39,9 +39,9 @@ box_d = [col_left(2) row_bottom(2) box_w box_h];
 box_e = [col_left(1) row_bottom(3) box_w box_h];
 box_f = [col_left(2) row_bottom(3) box_w box_h];
 
-% Insets are [left bottom width height] as fractions of the box. Panel E's is
+% Insets are [left bottom width height] as fractions of the box. Panel F's is
 % the one fig06_beta_cohorts_preview.m was tuned with, at the size a sixth of
-% this page has, so panel E renders exactly as it did there.
+% this page has, so panel F renders exactly as it did there.
 inset = [.14 .19 .83 .77];
 inset_plain = [.1 .1 .8 .8];
 
@@ -61,6 +61,12 @@ fig06_value_complexity(pos_b, options);
 fig06_sample_policies(pos_c, options);
 fig06_subject_curves(pos_d, options);
 
+[~, model_tbl] = fig06_beta_vs_avg_steps(pos_e, [], options);
+
+fprintf('Panel E: model curve %.4f guesses/game at beta = %g, %.4f at beta = %g\n', ...
+    model_tbl.mean_steps(1), model_tbl.beta(1), ...
+    model_tbl.mean_steps(end), model_tbl.beta(end));
+
 cohorts = compute_cohort_betas();
 
 for k = 1:numel(cohorts)
@@ -68,13 +74,7 @@ for k = 1:numel(cohorts)
         cohorts(k).threshold, cohorts(k).n_subjects, mean(cohorts(k).betas));
 end
 
-fig06_beta_cohorts(pos_e, cohorts, options);
-
-[~, model_tbl] = fig06_beta_vs_avg_steps(pos_f, [], options);
-
-fprintf('Panel F: model curve %.4f guesses/game at beta = %g, %.4f at beta = %g\n', ...
-    model_tbl.mean_steps(1), model_tbl.beta(1), ...
-    model_tbl.mean_steps(end), model_tbl.beta(end));
+fig06_beta_cohorts(pos_f, cohorts, options);
 
 letters = 'ABCDEF';
 boxes = [box_a; box_b; box_c; box_d; box_e; box_f];

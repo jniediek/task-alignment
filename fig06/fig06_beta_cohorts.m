@@ -1,6 +1,6 @@
 function [ax, tbl, key_ax] = fig06_beta_cohorts(pos, cohorts, options)
 % JN 2026-08-03
-% Panel E of figure 6: beta_hat per game number, four cohorts in one panel.
+% Panel F of figure 6: beta_hat per game number, four cohorts in one panel.
 %
 %   AX = FIG06_BETA_COHORTS(POS, COHORTS, OPTIONS) draws into a new axes at
 %   normalized position POS = [left bottom width height].
