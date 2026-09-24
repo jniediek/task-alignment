@@ -40,7 +40,7 @@ ax.Box = "off";
 count = 0;
 for ixs = rel_pos
     count = count + 1;
-    plot(ax, x_info(ixs), y_value(ixs), '.', 'markersize', 30, 'LineWidth', 3, 'Color', options.TitleColors(count, :))
+    plot(ax, x_info(ixs), y_value(ixs), '.', 'MarkerSize', 20, 'LineWidth', 3, 'Color', options.TitleColors(count, :))
     str = sprintf("%.3f", betas(ixs));
     text(ax, x_info(ixs) + 10 , y_value(ixs) + 45, ...
         strcat("\beta = ", str), 'Color', options.TitleColors(count, :), 'FontSize', 12)

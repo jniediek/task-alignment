@@ -6,8 +6,8 @@ function [ax, model_tbl, human_tbl] = fig06_beta_vs_avg_steps(pos, data_dir, opt
 %   at normalized position POS = [left bottom width height].
 %
 %   [AX, MODEL_TBL, HUMAN_TBL] = FIG06_BETA_VS_AVG_STEPS(...) also returns the
-%   plotted values: MODEL_TBL with columns beta, mean_steps, sd_steps (one row
-%   per beta), and HUMAN_TBL with columns subject_id, beta_hat, avg_steps (one
+%   plotted values: MODEL_TBL with columns beta, mean_steps, sd_steps, band_lo,
+%   band_hi (one row per beta), and HUMAN_TBL with columns subject_id, beta_hat, avg_steps (one
 %   row per subject). Both are built from the very vectors that are plotted, so
 %   they serve as the numerical reference for the panel. Writing them to disk
 %   is left to the caller.
@@ -30,13 +30,20 @@ function [ax, model_tbl, human_tbl] = fig06_beta_vs_avg_steps(pos, data_dir, opt
 %   reproducible against Python at all: two different RNGs never agree, two
 %   evaluations of the same recursion do.
 %
-%   The shaded band is +/- 1 SD of the per-game distribution, i.e. how much
-%   individual game lengths scatter around the model mean -- NOT a confidence
-%   interval on the mean, which for an exact curve would be zero. The Python
-%   variant instead draws sd/sqrt(1000) error bars, purely so its PNG stays
-%   visually comparable with the Monte Carlo original it replaces. Both read
-%   the same two numbers out of EXACT_STEPS_MOMENTS; only the rendering
-%   differs, and the CSVs they write carry mean and SD, not the bars.
+%   THE BAND IS FOR A SUBJECT'S AVERAGE, NOT FOR ONE GAME
+%   -----------------------------------------------------
+%   Each dot is a subject's mean over n games, which scatters around the model
+%   mean by SD/sqrt(n), not by the per-game SD. A +/- 1 SD band would hold
+%   every subject whether or not the model fits. The band is therefore
+%   mean +/- 1.96 SD/sqrt(n), the central 95% range of an n-game average under
+%   the model, normal by the central limit theorem (n >= 21 for every subject).
+%   It is not a confidence interval: the curve is exact. n is the median
+%   number of games, floored to a whole game, so the band is exact only for
+%   the typical subject; the per-subject check, which uses each subject's own
+%   n, is printed as z scores (see below) and belongs in the caption.
+%
+%   The Python variant instead draws sd/sqrt(1000) error bars, purely so its
+%   PNG stays visually comparable with the Monte Carlo original it replaces.
 %
 %   The message: humans with a higher fitted beta finish games in fewer
 %   guesses, tracking the model curve, and essentially nobody beats it.
@@ -76,10 +83,30 @@ human_beta = [fits.beta_hat]';
 % Mean guesses per game. fig06_steps.mat holds one row per choice step and
 % n_games per subject, so this is exactly Python's
 % len(choice_steps) / count_total_games(steps).
-human_avg = [fits.n_steps]' ./ [fits.n_games]';
+n_games = [fits.n_games]';
+human_avg = [fits.n_steps]' ./ n_games;
 
-model_tbl = table(betas, mean_steps, sd_steps, ...
-                  'VariableNames', {'beta', 'mean_steps', 'sd_steps'});
+% Floored so the label names a whole number of games; the median of an even
+% number of subjects can fall between two.
+n_band = floor(median(n_games));
+half_width = 1.96 * sd_steps / sqrt(n_band);
+band_lo = mean_steps - half_width;
+band_hi = mean_steps + half_width;
+
+% Per-subject standardized residual against the model at that subject's
+% beta_hat, with the subject's own number of games. If the model explains the
+% scatter, z is roughly standard normal: SD near 1, 95% within +/- 1.96.
+z = (human_avg - interp1(betas, mean_steps, human_beta)) ./ ...
+    (interp1(betas, sd_steps, human_beta) ./ sqrt(n_games));
+fprintf(['Panel E: band for n = %g games (median); z over %d subjects: ' ...
+         'mean %.2f, SD %.2f, %.1f%% within +/-1.96, %.1f%% below, ' ...
+         '%.1f%% above\n'], n_band, numel(z), mean(z), std(z), ...
+        100 * mean(abs(z) <= 1.96), 100 * mean(z < -1.96), ...
+        100 * mean(z > 1.96));
+
+model_tbl = table(betas, mean_steps, sd_steps, band_lo, band_hi, ...
+                  'VariableNames', {'beta', 'mean_steps', 'sd_steps', ...
+                                    'band_lo', 'band_hi'});
 human_tbl = table([fits.subject_id]', human_beta, human_avg, ...
                   'VariableNames', {'subject_id', 'beta_hat', 'avg_steps'});
 
@@ -89,7 +116,7 @@ ax.NextPlot = "add";
 
 % Band first, so the subjects and the mean line sit on top of it.
 fill(ax, [betas; flipud(betas)], ...
-     [mean_steps - sd_steps; flipud(mean_steps + sd_steps)], ...
+     [band_lo; flipud(band_hi)], ...
      c_model, 'FaceAlpha', .12, 'EdgeColor', 'none');
 
 scatter(ax, human_beta, human_avg, markerarea, c_human, 'filled', ...
@@ -121,6 +148,7 @@ ax.TickLength = [.015 .015];
 % fig06_beta_cohorts.m.
 text(ax, 1.98, 9.15, 'Human subjects', 'Color', c_human, ...
      'FontSize', tick_size, 'HorizontalAlignment', 'right');
-text(ax, 1.98, 8.75, 'Model (exact) \pm1 SD', 'Color', c_model, ...
+text(ax, 1.98, 8.75, sprintf('Model, 95%% range (n = %g)', n_band), ...
+     'Color', c_model, ...
      'FontSize', tick_size, 'HorizontalAlignment', 'right');
 end
