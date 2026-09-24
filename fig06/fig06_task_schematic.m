@@ -3,7 +3,7 @@ function ax = fig06_task_schematic(pos, options)
 % Panel A of figure 6: explanation of the number-guessing task.
 
 
-ax = fig06_stub_panel(pos, 'Explanation of the task', options);
+ax = axes('Position', pos);
 
 ax.Visible = 'off';
 ax.XLim = [0, 100];
